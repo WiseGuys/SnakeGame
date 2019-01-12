@@ -1,0 +1,94 @@
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+canvas {
+    border: 1px solid black;
+}
+
+section#controller {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
+}
+
+section#controller > div {
+    width: 100%;
+    height: 33.33vh;
+}
+
+section#controller div#sideButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+section#controller div#sideButtons > div {
+    width: 50%;
+    height: 33.33vh;
+}
+
+div.button {
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
+}
+
+div.button p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+div#downButton {
+    border-top: 1px solid black;
+}
+
+div#leftButton {
+    border-right: 1px solid black;
+}
+
+div#upButton {
+    border-bottom: 1px solid black;
+}
+
+div#downButton p {
+    -webkit-transform: rotateZ(90deg);
+    -moz-transform: rotateZ(90deg);
+    -ms-transform: rotateZ(90deg);
+    -o-transform: rotateZ(90deg);
+    transform: rotateZ(90deg);
+}
+
+div#leftButton p {
+    -webkit-transform: rotateZ(180deg);
+    -moz-transform: rotateZ(180deg);
+    -ms-transform: rotateZ(180deg);
+    -o-transform: rotateZ(180deg);
+    transform: rotateZ(180deg);
+}
+
+div#upButton p {
+    -webkit-transform: rotateZ(270deg);
+    -moz-transform: rotateZ(270deg);
+    -ms-transform: rotateZ(270deg);
+    -o-transform: rotateZ(270deg);
+    transform: rotateZ(270deg);
+}
