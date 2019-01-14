@@ -1,13 +1,15 @@
 let $body = $("body"),
-    $gameCanvas = $("canvas#game"), gameOver = false, lostPlayersCount = 0,
-    docWidth = $body.css("width").replace("px", ""),
-    docHeight = $body.css("height").replace("px", ""),
+    $gameCanvas = $("canvas#game"),
+    gameOver = false,
+    lostPlayersCount = 0,
+    bodyHeight, bodyWidth,
     snakeSize = calcSize(),
-    canvasWidth = docWidth - (docWidth % snakeSize) - snakeSize,
-    canvasHeight = docHeight - (docHeight % snakeSize) - snakeSize,
-    canvasVerticalSize, canvasHorizontalSize, canvasSize,
+    canvasWidth,
+    canvasHeight,
+    canvasVerticalBlockSize, canvasHorizontalBlockSize,
     canvasMiddleVer, canvasMiddleHor,
-    freeIndexes = [], players = {
+    freeIndexes = [],
+    players = {
         count: 8,
         users: [
             {
@@ -57,20 +59,27 @@ for (let i = 0; i < 4; i++)
     });
 
 $(document).ready(function () {
-    if ((canvasWidth / snakeSize) % 2 === 0)
-        canvasWidth -= snakeSize;
-    if ((canvasHeight / snakeSize) % 2 === 0)
-        canvasHeight -= snakeSize;
+    bodyHeight = document.body.clientHeight;
+    bodyWidth = document.body.clientWidth;
 
-    canvasHorizontalSize = canvasWidth / snakeSize;
-    canvasVerticalSize = canvasHeight / snakeSize;
-    canvasSize = canvasHorizontalSize * canvasVerticalSize;
-    canvasMiddleHor = Math.ceil(canvasHorizontalSize / 2);
-    canvasMiddleVer = Math.ceil(canvasVerticalSize / 2);
+    /*
+     * Canvas sizes must be a factor of the snake size. So, reduce the extra width and height from
+     * the canvas that does not fit the snake size.
+     */
+    canvasWidth = bodyWidth - (bodyWidth % snakeSize),
+    canvasHeight = bodyHeight - (bodyHeight % snakeSize),
 
-    for (let i = 1; i <= canvasHorizontalSize; i++) {
+    /*
+     * Indicates the block size of the canvas. The block sizes are actually the snake body parts. 
+     * If a snake moves, it must move on the blocks and not out of them.
+     */
+    canvasHorizontalBlockSize = canvasWidth / snakeSize;
+    canvasVerticalBlockSize = canvasHeight / snakeSize;
+
+    // Set all indexes as free
+    for (let i = 1; i <= canvasHorizontalBlockSize; i++) {
         freeIndexes[i] = [];
-        for (let j = 1; j <= canvasVerticalSize; j++)
+        for (let j = 1; j <= canvasVerticalBlockSize; j++)
             freeIndexes[i][j] = true;
     }
 
@@ -79,37 +88,41 @@ $(document).ready(function () {
         height: canvasHeight
     });
 
+    // Game start
     play();
 });
 
 function play() {
-    players.user.x = 4;
-    players.user.y = Math.floor(canvasVerticalSize / 8);
-    players.cpu1.x = 4;
-    players.cpu1.y = Math.floor(canvasVerticalSize / 8 * 3);
-    players.cpu2.x = 4;
-    players.cpu2.y = Math.floor(canvasVerticalSize / 8 * 5);
-    players.cpu3.x = 4;
-    players.cpu3.y = Math.floor(canvasVerticalSize / 8 * 7);
-    players.cpu4.x = canvasHorizontalSize - 4;
-    players.cpu4.y = Math.floor(canvasVerticalSize / 8);
-    players.cpu5.x = canvasHorizontalSize - 4;
-    players.cpu5.y = Math.floor(canvasVerticalSize / 8 * 3);
-    players.cpu6.x = canvasHorizontalSize - 4;
-    players.cpu6.y = Math.floor(canvasVerticalSize / 8 * 5);
-    players.cpu7.x = canvasHorizontalSize - 4;
-    players.cpu7.y = Math.floor(canvasVerticalSize / 8 * 7);
+    // Set up players positions
+    players.users[0].x = 4;
+    players.users[0].y = Math.floor(canvasVerticalBlockSize / 8);
+    players.bots[0].x = 4;
+    players.bots[0].y = Math.floor(canvasVerticalBlockSize / 8 * 3);
+    players.bots[1].x = 4;
+    players.bots[1].y = Math.floor(canvasVerticalBlockSize / 8 * 5);
+    players.bots[2].x = 4;
+    players.bots[2].y = Math.floor(canvasVerticalBlockSize / 8 * 7);
+    players.bots[3].x = canvasHorizontalBlockSize - 4;
+    players.bots[3].y = Math.floor(canvasVerticalBlockSize / 8);
+    players.bots[4].x = canvasHorizontalBlockSize - 4;
+    players.bots[4].y = Math.floor(canvasVerticalBlockSize / 8 * 3);
+    players.bots[5].x = canvasHorizontalBlockSize - 4;
+    players.bots[5].y = Math.floor(canvasVerticalBlockSize / 8 * 5);
+    players.bots[6].x = canvasHorizontalBlockSize - 4;
+    players.bots[6].y = Math.floor(canvasVerticalBlockSize / 8 * 7);
 
-    movePlayer(players.user);
-    movePlayer(players.cpu1, true);
-    movePlayer(players.cpu2, true);
-    movePlayer(players.cpu3, true);
-    movePlayer(players.cpu4, true);
-    movePlayer(players.cpu5, true);
-    movePlayer(players.cpu6, true);
-    movePlayer(players.cpu7, true);
+    // Start the game by moving players
+    movePlayer(players.users[0]);
+    movePlayer(players.bots[0], true);
+    movePlayer(players.bots[1], true);
+    movePlayer(players.bots[2], true);
+    movePlayer(players.bots[3], true);
+    movePlayer(players.bots[4], true);
+    movePlayer(players.bots[5], true);
+    movePlayer(players.bots[6], true);
 }
 
+// Draws a snake body block
 function drawSnakeBody($canvas, xSize, ySize, boxSize, options) {
     $canvas.drawRect($.extend({
         x: (xSize - 1) * boxSize,
@@ -159,7 +172,7 @@ function movePlayer(player, alBot = false) {
                 else alert("You lost!");
             }
         }
-    }, 25);
+    }, 50);
 }
 
 function checkAvailableWays(alBot, checkAllowed = false) {
@@ -263,6 +276,6 @@ $(document).keydown(function (event) {
             break;
     }
 
-    if ($.inArray(convertDirectionTo, allowedDirections[players.user.direction]) !== -1)
-        players.user.direction = convertDirectionTo;
+    if ($.inArray(convertDirectionTo, allowedDirections[players.users[0].direction]) !== -1)
+        players.users[0].direction = convertDirectionTo;
 });
