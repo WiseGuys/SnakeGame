@@ -112,15 +112,13 @@ function play() {
     players.bots[6].x = canvasHorizontalBlockSize - 4;
     players.bots[6].y = Math.floor(canvasVerticalBlockSize / 8 * 7);
 
-    // Start the game by moving players
-    movePlayer(players.users[0]);
-    movePlayer(players.bots[0], true);
-    movePlayer(players.bots[1], true);
-    movePlayer(players.bots[2], true);
-    movePlayer(players.bots[3], true);
-    movePlayer(players.bots[4], true);
-    movePlayer(players.bots[5], true);
-    movePlayer(players.bots[6], true);
+    // Move all players, including users and bots
+    players.users.forEach(function (player) {
+        movePlayer(player);
+    });
+    players.bots.forEach(function (player) {
+        movePlayer(player, true);
+    });
 }
 
 function movePlayer(player, alBot = false) {
