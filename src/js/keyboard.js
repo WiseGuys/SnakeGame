@@ -10,6 +10,6 @@ $(document).keydown(function (event) {
      * Change the direction if it's allowed. For example, don't allow to change direction from left
      * to right, because it causes the snake to go inside itself!
      */
-    if ($.inArray(newDirection, allowedDirections[window.players.users[0].direction]) !== -1)
-        window.players.users[0].direction = newDirection;
+    if ($.inArray(newDirection, allowedDirections[players.users[0].direction]) !== -1)
+        players.users[0].direction = newDirection;
 });
