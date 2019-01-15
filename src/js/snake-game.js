@@ -55,7 +55,7 @@ let $body = $("body"),
 
 for (let i = 0; i < 4; i++)
     $("div#" + directions[i] + "Button").on("click", function () {
-        if ($.inArray(directions[i], allowedDirections[players.user.direction]) !== -1)
+        if ($.inArray(directions[i], allowedDirections[players.users[0].direction]) !== -1)
             players.users[0].direction = directions[i];
     });
 
