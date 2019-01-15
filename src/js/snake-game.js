@@ -44,13 +44,14 @@ let $body = $("body"),
                 color: "crimson"
             }
         ]
-    }, directions = ["right", "left", "up", "down"],
+    },
+    directions = ["right", "left", "up", "down"],
     allowedDirections = {
         right: ["up", "down"],
         left: ["up", "down"],
         up: ["right", "left"],
         down: ["right", "left"]
-    };
+    };;
 
 for (let i = 0; i < 4; i++)
     $("div#" + directions[i] + "Button").on("click", function () {
@@ -122,17 +123,6 @@ function play() {
     movePlayer(players.bots[6], true);
 }
 
-// Draws a snake body block
-function drawSnakeBody($canvas, xSize, ySize, boxSize, options) {
-    $canvas.drawRect($.extend({
-        x: (xSize - 1) * boxSize,
-        y: (ySize - 1) * boxSize,
-        width: boxSize,
-        height: boxSize,
-        fromCenter: false
-    }, options));
-}
-
 function movePlayer(player, alBot = false) {
     setTimeout(function () {
         if (alBot)
@@ -173,6 +163,17 @@ function movePlayer(player, alBot = false) {
             }
         }
     }, 50);
+}
+
+// Draws a snake body block
+function drawSnakeBody($canvas, xSize, ySize, boxSize, options) {
+    $canvas.drawRect($.extend({
+        x: (xSize - 1) * boxSize,
+        y: (ySize - 1) * boxSize,
+        width: boxSize,
+        height: boxSize,
+        fromCenter: false
+    }, options));
 }
 
 function checkAvailableWays(alBot, checkAllowed = false) {
@@ -254,28 +255,3 @@ function isIndexFree(x, y) {
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-$(document).keydown(function (event) {
-    let convertDirectionTo;
-
-    switch (event.key) {
-        case "ArrowRight":
-            convertDirectionTo = "right";
-            break;
-        case "ArrowLeft":
-            convertDirectionTo = "left";
-            break;
-        case "ArrowUp":
-            convertDirectionTo = "up";
-            break;
-        case "ArrowDown":
-            convertDirectionTo = "down";
-            break;
-        default:
-            convertDirectionTo = null;
-            break;
-    }
-
-    if ($.inArray(convertDirectionTo, allowedDirections[players.users[0].direction]) !== -1)
-        players.users[0].direction = convertDirectionTo;
-});
