@@ -19,7 +19,7 @@
         "@babel/preset-env": "^7.2.3"
     },
     "scripts": {
-        "build": "babel src/js -d lib/js"
+        "build": "babel src/js -d src/std-js"
     },
     "dependencies": {
         "@babel/polyfill": "^7.2.5"
